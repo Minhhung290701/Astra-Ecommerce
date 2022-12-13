@@ -31,7 +31,7 @@ const userController = {
         _id: document.documentId
       });
       
-      console.log(document)
+      //console.log(document)
 
       // Save mongodb
       //await newUser.save()
@@ -58,7 +58,7 @@ const userController = {
       let Users = await usersCollection()
 
       const user = await Users.findOne({ email: {$eq : email} })
-      console.log(user)
+      //console.log(user)
       if (!user) return res.status(400).json({msg: "User does not exist."})
 
       const isMatch = await bcrypt.compare(password, user.password)

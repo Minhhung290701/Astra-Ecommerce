@@ -6,7 +6,7 @@ const authAdmin = async (req, res, next) => {
     // Get user information by id
     let Users = await usersCollection()
     const user = await Users.get(req.user.id)
-    console.log(user)
+    //console.log(user)
     if (user.role === 0) return res.status(400).json({msg: "Admin resources access denied."})
 
     next()

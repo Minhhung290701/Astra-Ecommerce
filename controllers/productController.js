@@ -1,5 +1,6 @@
 //const Products = require('../models/productModel')
 const {productsCollection} = require('../models/productModel')
+const {Format} = require('../libs')
 // Filter, sorting and paginating
 
 class APIfeatures {
@@ -46,8 +47,18 @@ const productController = {
   getProducts: async (req, res) => {
     try {
       let Products = await productsCollection()
-      const features = new APIfeatures(Products.find(), req.query).filtering().sorting().paginating()
-      const products = await features.query
+      console.log(req.query)
+      //const features = new APIfeatures(Products.find(), req.query).filtering().sorting().paginating()
+      //const products = await features.query
+      const pro = await Products._get(null,{
+        params: {
+          where: {
+            category:  {$eq : req.query.category} 
+          },
+          "page-size": req.query.limit,
+        }})
+      const products = Format.formatTo_id(pro)
+      console.log(products)
 
       res.json({
         status: 'success',

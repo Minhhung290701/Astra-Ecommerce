@@ -9,9 +9,9 @@ const categoryController = {
     try {
       let Category = await categoryCollection()
       const categories = await Category.get()
-      console.log(categories)
+      //console.log(categories)
       categories1 = Format.formatTo_id(categories)
-      console.log(categories1)
+      //console.log(categories1)
       res.json(categories1)
     } catch (err) {
       return res.status(500).json({msg: err.message})

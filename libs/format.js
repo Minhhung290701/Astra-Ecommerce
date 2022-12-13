@@ -7,7 +7,7 @@
   */
  
 exports.formatTo_id = entity => {
-    console.log(entity)
+    //console.log(entity)
     if (!entity || typeof entity !== 'object') {
         return entity
     }

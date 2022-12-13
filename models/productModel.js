@@ -7,7 +7,7 @@ const productsCollection = async () => {
 }
 const a = async() => {
   let Products = await productsCollection()
-console.log(await Products.get())
+  //console.log(await Products.get())
 }
 a()
 
