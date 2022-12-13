@@ -1,14 +1,20 @@
-/* const { getAstraClient } = require("../connections/astradb");
+const { getAstraClient } = require("../connections/astradb");
 
 
 const productsCollection = async () => {
   //console.log(await (await getAstraClient()).createCollection('users'))
   return (await getAstraClient()).collection('products')
 }
+const a = async() => {
+  let Products = await productsCollection()
+console.log(await Products.get())
+}
+a()
 
-module.exports = {productsCollection} */
+module.exports = {productsCollection}
 
- const mongoose = require('mongoose')
+
+/*  const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
   product_id: {
@@ -55,4 +61,4 @@ const productSchema = new mongoose.Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model('Products', productSchema) 
+module.exports = mongoose.model('Products', productSchema)  */

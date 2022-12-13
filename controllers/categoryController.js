@@ -59,6 +59,7 @@ const categoryController = {
       const {name} = req.body;
       let Category = await categoryCollection()
       await Category.update(`${req.params.id}/name`, name)
+      await Category.update(`${req.params.id}/updatedAt`, new Date())
       res.json({msg: "Updated a category."})
     } catch (err) {
       return res.status(500).json({msg: err.message})                  

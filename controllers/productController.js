@@ -1,6 +1,5 @@
-const Products = require('../models/productModel')
-//const {productsCollection} = require('../models/userModel')
-
+//const Products = require('../models/productModel')
+const {productsCollection} = require('../models/productModel')
 // Filter, sorting and paginating
 
 class APIfeatures {
@@ -46,6 +45,7 @@ class APIfeatures {
 const productController = {
   getProducts: async (req, res) => {
     try {
+      let Products = await productsCollection()
       const features = new APIfeatures(Products.find(), req.query).filtering().sorting().paginating()
       const products = await features.query
 
@@ -60,17 +60,36 @@ const productController = {
   },
   createProduct: async (req, res) => {
     try {
+      let Products = await productsCollection()
       const {product_id, title, price, description, content, images, category, sold} = req.body;
       if (!images) return res.status(400).json({msg: "No image upload."})
 
-      const product = await Products.findOne({product_id})
+      const product = await Products.findOne({ product_id: {$eq : product_id} })
       if (product) return res.status(400).json({msg: "This product already exists."})
 
-      const newProduct = await Products({
+/*       const newProduct1 = await Products({
         product_id, title: title.toLowerCase(), price, description, content, images, category, sold
-      })
+      }) */
 
-      await newProduct.save()
+      const newProduct = {
+        product_id: product_id,
+        title: title.toLowerCase(),
+        price: price,
+        description: description,
+        content: content,
+        images: images,
+        category: category,
+        sold: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+
+      const document = await Products.create(newProduct)
+      await Products.update(`${document.documentId}`, {
+        _id: document.documentId
+      });
+
+      //await newProduct.save()
       res.json({msg: "Created a product."})
     } catch (err) {
       return res.status(500).json({msg: err.message})
@@ -78,7 +97,8 @@ const productController = {
   },
   deleteProduct: async (req, res) => {
     try {
-      await Products.findByIdAndDelete(req.params.id)
+      let Products = await productsCollection()
+      await Products.delete(req.params.id)
       res.json({msg: "Deleted a product."})
     } catch (err) {
       return res.status(500).json({msg: err.message})
