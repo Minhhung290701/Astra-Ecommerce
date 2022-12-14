@@ -8,8 +8,6 @@ const getAstraClient = async  () => {
         applicationToken: process.env.ASTRA_DB_APPLICATION_TOKEN,
     });
     const Collections = astraClient.namespace(process.env.ASTRA_DB_KEYSPACE)
-    //console.log(await Collections.getCollections())
-    //const Collection = Collections.collection(collection)
     return Collections
 }
 

@@ -9,9 +9,7 @@ const categoryController = {
     try {
       let Category = await categoryCollection()
       const categories = await Category.get()
-      //console.log(categories)
       categories1 = Format.formatTo_id(categories)
-      //console.log(categories1)
       res.json(categories1)
     } catch (err) {
       return res.status(500).json({msg: err.message})
@@ -24,9 +22,6 @@ const categoryController = {
       const category = await Category.findOne({ name: {$eq : name} })
       if (category) return res.status(400).json({msg: "This category already exists."})
 
-      /* const newCategory = await Category({name})
-      
-      await newCategory.save() */
       const newCategory ={
         name : name,
         createdAt: new Date(),
@@ -49,7 +44,6 @@ const categoryController = {
       if (products) return res.status(400).json({msg: "Please delete all products with a relationship."})
 
       await Category.delete(req.params.id)
-      //await Category.findByIdAndDelete(req.params.id)
       res.json({msg: "Deleted a category."})
     } catch (err) {
       return res.status(500).json({msg: err.message})            

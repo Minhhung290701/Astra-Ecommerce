@@ -3,8 +3,6 @@ const {usersCollection} = require('../models/userModel')
 const {productsCollection} = require('../models/productModel')
 const {Format} = require('../libs/')
 
-const Products = require('../models/productModel')
-
 const paymentController = {
   getPayments: async (req, res) => {
     try {

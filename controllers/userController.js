@@ -9,14 +9,9 @@ const userController = {
     try {
       const {name, email, password} = req.body;
       let Users = await usersCollection()
-      //console.log('00000',Users)
       const user = await Users.findOne({ email: {$eq : email} })
-
-      //const user = await Users.findOne({email})
       if (user) return res.status(400).json({msg: "The email already exists."})
-
       if (password.length < 6) return res.status(400).json({msg: "Password is at least 6 charactes long."})
-
       // Password encryption
       const passwordHash = await bcrypt.hash(password, 10)
       const newUser ={
@@ -31,11 +26,6 @@ const userController = {
       await Users.update(`${document.documentId}`, {
         _id: document.documentId
       });
-      
-      //console.log(document)
-
-      // Save mongodb
-      //await newUser.save()
 
       // Create jsonwebtoken to authentication
       const accesstoken = createAccessToken({id: document.documentId})
@@ -48,7 +38,6 @@ const userController = {
       })
 
       res.json({accesstoken})
-      //res.json('1')
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
@@ -59,7 +48,6 @@ const userController = {
       let Users = await usersCollection()
 
       const user = await Users.findOne({ email: {$eq : email} })
-      //console.log(user)
       if (!user) return res.status(400).json({msg: "User does not exist."})
 
       const isMatch = await bcrypt.compare(password, user.password)
@@ -109,7 +97,6 @@ const userController = {
     try {
       let Users = await usersCollection()
       const user = await Users.get(req.user.id)
-      //const user = await Users.findById(req.user.id).select('-password')
       if (!user) return res.status(400).json({msg: "User does not exist."})
 
       res.json(user)

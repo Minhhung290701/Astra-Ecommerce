@@ -47,12 +47,10 @@ const productController = {
   getProducts: async (req, res) => {
     try {
       let Products = await productsCollection()
-      //console.log(req.query)
       let where = {}
       if(req.query.category) {
         where.category = { $eq: req.query.category }
       }
-      //console.log(where)
 
       const pro = await Products._get(null,{
         params: {
@@ -73,7 +71,6 @@ const productController = {
       else {
         productEnd = products
       }
-      //console.log(productEnd)
 
       res.json({
         status: 'success',
@@ -93,10 +90,6 @@ const productController = {
       const product = await Products.findOne({ product_id: {$eq : product_id} })
       if (product) return res.status(400).json({msg: "This product already exists."})
 
-/*       const newProduct1 = await Products({
-        product_id, title: title.toLowerCase(), price, description, content, images, category, sold
-      }) */
-
       const newProduct = {
         product_id: product_id,
         title: title.toLowerCase(),
@@ -115,7 +108,6 @@ const productController = {
         _id: document.documentId
       });
 
-      //await newProduct.save()
       res.json({msg: "Created a product."})
     } catch (err) {
       return res.status(500).json({msg: err.message})
