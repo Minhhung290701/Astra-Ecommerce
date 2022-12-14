@@ -1,5 +1,6 @@
 const {usersCollection} = require('../models/userModel')
-const Payments = require('../models/paymentModel')
+const {paymentCollection} = require('../models/paymentModel')
+const {Format} = require('../libs/')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -129,8 +130,16 @@ const userController = {
   },
   history: async (req, res) => {
     try {
-      const history = await Payments.find({user_id: req.user.id}) 
-      res.json(history)
+      let Payments = await paymentCollection()
+      const history = await Payments._get(null,{
+        params: {
+          where: {
+            user_id: {$eq: req.user.id}
+          },
+        }})
+      const historyEnd = Format.formatTo_id(history)
+      console.log(historyEnd)
+      res.json(historyEnd)
     } catch (err) {
       return res.status(500).json({msg: err.message})      
     }

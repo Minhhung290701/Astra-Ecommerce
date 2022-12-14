@@ -1,4 +1,20 @@
-const mongoose = require('mongoose')
+const { getAstraClient } = require("../connections/astradb");
+
+
+const paymentCollection = async () => {
+  //console.log(await (await getAstraClient()).createCollection('users'))
+  return (await getAstraClient()).collection('payments')
+}
+/* const a = async() => {
+  let Products = await paymentCollection()
+  //console.log(await Products.get())
+}
+a()
+ */
+module.exports = {paymentCollection}
+
+
+/* const mongoose = require('mongoose')
 
 const paymentSchema = new mongoose.Schema({
   user_id: {
@@ -33,4 +49,4 @@ const paymentSchema = new mongoose.Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model("Payments", paymentSchema)
+module.exports = mongoose.model("Payments", paymentSchema) */

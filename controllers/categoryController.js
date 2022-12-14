@@ -1,5 +1,5 @@
 const {categoryCollection} = require('../models/categoryModel')
-const Products = require('../models/productModel')
+const {productsCollection} = require('../models/productModel')
 const {Format} = require('../libs')
 
 
@@ -44,8 +44,9 @@ const categoryController = {
   deleteCategory: async (req, res) => {
     try {
       let Category = await categoryCollection()
-      //const products = await Products.findOne({category: req.params.id})
-      //if (products) return res.status(400).json({msg: "Please delete all products with a relationship."})
+      let Products = await productsCollection()
+      const products = await Products.get()
+      if (products) return res.status(400).json({msg: "Please delete all products with a relationship."})
 
       await Category.delete(req.params.id)
       //await Category.findByIdAndDelete(req.params.id)
