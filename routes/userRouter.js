@@ -12,7 +12,7 @@ router.get('/refresh_token', userController.refreshToken)  //done
 
 router.get('/infor', auth, userController.getUser) //done
 
-router.patch('/addcart', auth, userController.addToCart)
+router.patch('/addcart', auth, userController.addToCart)      //done
 
 router.get('/history', auth, userController.history)
 

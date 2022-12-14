@@ -47,23 +47,38 @@ const productController = {
   getProducts: async (req, res) => {
     try {
       let Products = await productsCollection()
-      console.log(req.query)
-      //const features = new APIfeatures(Products.find(), req.query).filtering().sorting().paginating()
-      //const products = await features.query
+      //console.log(req.query)
+      let where = {}
+      if(req.query.category) {
+        where.category = { $eq: req.query.category }
+      }
+      //console.log(where)
+
       const pro = await Products._get(null,{
         params: {
-          where: {
-            category:  {$eq : req.query.category} 
-          },
+          where: where,
           "page-size": req.query.limit,
         }})
       const products = Format.formatTo_id(pro)
-      console.log(products)
+      let productEnd = []
+      if(req.query.title.regex != '') {
+        Promise.all(
+          await products.map( (x) => {
+            if(x.title.indexOf(req.query.title.regex) != -1) {
+              productEnd.push(x)
+            }
+          }
+        ))
+      }
+      else {
+        productEnd = products
+      }
+      //console.log(productEnd)
 
       res.json({
         status: 'success',
-        result: products.length,
-        products: products
+        result: productEnd.length,
+        products: productEnd
       })
     } catch (err) {
       return res.status(500).json({msg: err.message})
@@ -117,11 +132,12 @@ const productController = {
   },
   updateProduct: async (req, res) => {
     try {
+      let Products = await productsCollection()
       const {title, price, description, content, images, category} = req.body;
       if (!images) return res.status(400).json({msg: "No image upload."})
       
-      await Products.findOneAndUpdate({_id: req.params.id}, {
-        title: title.toLowerCase(), price, description, content, images, category
+      await Products.update(req.params.id, {
+        title: title.toLowerCase(), price:price, description:description, content:content, images:images, category:category
       })
 
       res.json({msg: "Updated a product"})
